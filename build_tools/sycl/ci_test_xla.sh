@@ -36,8 +36,8 @@ fi
 TEST_TARGETS="${TEST_TARGETS:-\
   //xla/stream_executor/... \
   //xla/backends/gpu/codegen/emitters/tests/... \
-  -//xla/backends/gpu/codegen/emitters/tests:transpose/packed_transpose_s4.hlo.test \
   //xla/codegen/emitters/tests/... \
+  -//xla/backends/gpu/codegen/emitters/tests:transpose/packed_transpose_s4.hlo.test \
   -//xla/codegen/emitters/tests:loop/s8_to_s2.hlo.test\
 }"
 
@@ -45,7 +45,7 @@ echo "TEST_TARGETS=${TEST_TARGETS}"
 
 bazel test \
   --config=sycl_hermetic --verbose_failures -c opt \
-  --test_timeout=1200 --flaky_test_attempts=2 --keep_going --test_keep_going \
+  --test_timeout=900 --flaky_test_attempts=2 --keep_going --test_keep_going \
   --build_tag_filters=gpu,oneapi-only,requires-gpu-intel,-requires-gpu-amd,-requires-gpu-nvidia,-no_oss,-cuda-only,-rocm-only,-no-oneapi \
   --test_tag_filters=gpu,oneapi-only,requires-gpu-intel,-requires-gpu-amd,-requires-gpu-nvidia,-no_oss,-cuda-only,-rocm-only,-no-oneapi \
   -- \
