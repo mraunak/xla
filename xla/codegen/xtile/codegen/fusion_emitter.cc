@@ -1012,7 +1012,7 @@ absl::StatusOr<TensorValue> EmitTiledHloInstruction(
 
   if (hlo->opcode() == HloOpcode::kConstant) {
     if (ShapeUtil::IsEffectiveScalar(hlo->shape())) {
-      return EmitConstant(b, *hlo);
+      return EmitConstant(b, *hlo, GetPaddedTileSizes(tiled_hlo.tile_sizes()));
     }
     return absl::UnimplementedError(
         absl::StrCat("Unsupported non-scalar constant ", hlo->ToString()));
@@ -1240,6 +1240,8 @@ absl::StatusOr<mlir::OwningOpRef<mlir::ModuleOp>> EmitXTileModule(
       !debug_options.xla_gpu_unsupported_enable_triton_multi_output_fusion()) {
     return absl::InvalidArgumentError("Multi-output fusion is disabled.");
   }
+
+  CHECK(!debug_options.xla_gpu_experimental_enable_tiling_propagation());
 
   const HloComputation* hlo_computation =
       fusion.fused_instructions_computation();
